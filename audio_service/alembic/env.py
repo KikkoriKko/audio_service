@@ -20,14 +20,13 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 target_metadata = None  # Ваши модели здесь
 
-# Получаем строку подключения из конфигурации
 SQLALCHEMY_DATABASE_URL = config.get_main_option("sqlalchemy.url")
 
-# Создаем асинхронный движок
 engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True, future=True)
 
 def run_migrations_online():
     connectable = create_async_engine(settings.get_db_url(), echo=True)
+
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")
@@ -54,7 +53,6 @@ async def run_migrations_online() -> None:
         with context.begin_transaction():
             await context.run_migrations()
 
-# Определяем, какой режим использовать
 if context.is_offline_mode():
     run_migrations_offline()  # Синхронный режим
 else:
