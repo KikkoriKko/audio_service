@@ -2,6 +2,7 @@ from logging.config import fileConfig
 from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy.orm import sessionmaker
 from alembic import context
+from app.core.config import settings
 import asyncio
 
 # this is the Alembic Config object, which provides
@@ -25,6 +26,8 @@ SQLALCHEMY_DATABASE_URL = config.get_main_option("sqlalchemy.url")
 # Создаем асинхронный движок
 engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True, future=True)
 
+def run_migrations_online():
+    connectable = create_async_engine(settings.get_db_url(), echo=True)
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
     url = config.get_main_option("sqlalchemy.url")

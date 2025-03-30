@@ -1,4 +1,3 @@
-# app/db/session.py
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import SQLAlchemyError
@@ -21,7 +20,6 @@ async_session = sessionmaker(
     expire_on_commit=False,
 )
 
-# Функция для получения сессии базы данных
 async def get_db() -> AsyncSession:
     """
     Функция, которая используется для получения текущей сессии базы данных.
@@ -33,4 +31,4 @@ async def get_db() -> AsyncSession:
             print(f"Ошибка SQLAlchemy: {e}")
             raise e
         finally:
-            await session.close()  # Закрытие сессии после использования
+            await session.close()

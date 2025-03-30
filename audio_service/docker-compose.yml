@@ -6,10 +6,10 @@ services:
       - "8000:8000"
     depends_on:
       - db
-    environment:
-      - DATABASE_URL=postgresql+asyncpg://user:password@db/fastapi_db
+    env_file:
+      - .env
   db:
-    image: postgres:13
+    image: postgres
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password

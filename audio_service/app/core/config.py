@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from pydantic_settings import BaseSettings
 import os
-from urllib.parse import urlparse
 
 
 class Settings(BaseSettings):
@@ -9,14 +8,13 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     DEBUG: bool = True
 
-    # Получаем DATABASE_URL или отдельные параметры
-    DATABASE_URL: str = os.getenv("DATABASE_URL", "")
-
-    POSTGRES_USER: str = os.getenv("POSTGRES_USER", "user")
-    POSTGRES_PASSWORD: str = os.getenv("POSTGRES_PASSWORD", "password")
-    POSTGRES_DB: str = os.getenv("POSTGRES_DB", "audio_db")
-    POSTGRES_HOST: str = os.getenv("POSTGRES_HOST", "localhost")
-    POSTGRES_PORT: int = int(os.getenv("POSTGRES_PORT", 5432))
+    # Настройка строки подключения или отдельных параметров
+    DATABASE_URL: str
+    POSTGRES_USER: str = "user"
+    POSTGRES_PASSWORD: str = "password"
+    POSTGRES_DB: str = "fastapi_db"
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 5432
 
     def get_db_url(self) -> str:
         """Возвращает строку подключения к БД"""
@@ -27,14 +25,15 @@ class Settings(BaseSettings):
                 f"{self.POSTGRES_PORT}/{self.POSTGRES_DB}")
 
     # Настройки аутентификации через Яндекс
-    YANDEX_CLIENT_ID: str = os.getenv("YANDEX_CLIENT_ID", "")
-    YANDEX_CLIENT_SECRET: str = os.getenv("YANDEX_CLIENT_SECRET", "")
+    YANDEX_CLIENT_ID: str = ""
+    YANDEX_CLIENT_SECRET: str = ""
 
     # Настройки токенов
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "supersecretkey")
+    SECRET_KEY: str = "supersecretkey"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
+    # Путь для хранения файлов
     MEDIA_DIRECTORY: str = os.path.join(os.getcwd(), "storage")
 
     class Config:

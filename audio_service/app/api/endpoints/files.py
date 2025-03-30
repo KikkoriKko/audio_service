@@ -1,6 +1,4 @@
-#app/api/endpoints/files.py
 from fastapi import APIRouter, File, UploadFile, Depends
-from fastapi.responses import JSONResponse
 from app.services.file_service import upload_audio_file, get_audio_files
 from app.schemas.file import AudioFileResponse
 from app.db.session import get_db
