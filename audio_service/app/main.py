@@ -5,7 +5,7 @@ from app.db.session import engine
 from app.models import user, file
 import uvicorn
 
-app = FastAPI()
+app = FastAPI(docs_url="/swagger", redoc_url=None)
 
 app.add_middleware(
     CORSMiddleware,
