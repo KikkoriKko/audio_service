@@ -38,27 +38,27 @@ fastapi_audio_service/
 │── Dockerfile  # Образ для Docker  
 │── docker-compose.yml  # Контейнеризация  
 │── requirements.txt  # Python-зависимости  
-│── README.md  # Документация  
+│── Documentation.md  # Документация  
 ```
 
 ## 3. Настройка переменных окружения
 Создайте файл `.env` в корне проекта и укажите в нем:
 ```
-POSTGRES_DB=fastapi_db
-POSTGRES_USER=fastapi_user
-POSTGRES_PASSWORD=fastapi_password
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
-YANDEX_CLIENT_ID=your_client_id
-YANDEX_CLIENT_SECRET=your_client_secret
-YANDEX_REDIRECT_URI=your_redirect_uri
+DATABASE_URL = postgresql+asyncpg://user:password@db:5432/fastapi_db
+SECRET_KEY = mysecretkey
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+DEBUG=True
+DB_PORT=5432
+DB_NAME=fastapi_db
+DB_USER=user
+DB_PASSWORD=password
 ```
 
 ## 4. Конфигурация Dockerfile
 ```dockerfile
-# Используем Python 3.11
-FROM python:3.11
-
+# Используем Python 3.10
+FROM python:3.10
 WORKDIR /app
 
 # Устанавливаем зависимости
@@ -74,39 +74,23 @@ CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 ## 5. Конфигурация docker-compose.yml
 ```yaml
-version: '3.8'
-
 services:
-  db:
-    image: postgres:16
-    restart: always
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
   app:
     build: .
-    depends_on:
-      - db
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_HOST: db
-      POSTGRES_PORT: 5432
     ports:
       - "8000:8000"
-    volumes:
-      - .:/app
-    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-
-volumes:
-  postgres_data:
+    depends_on:
+      - db
+    env_file:
+      - .env
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fastapi_db
+    ports:
+      - "5432:5432"
 ```
 
 ## 6. Запуск проекта в Docker
@@ -133,5 +117,13 @@ docker-compose down
 Для удаления всех данных БД:
 ```sh
 docker volume rm fastapi_audio_service_postgres_data
+```
+## 7. Проверка работы API в swagger
+```
+Откройте свагер по ссылке из терминала докера 
+
+Авторизуйтесь
+
+Проверьте работу апи 
 ```
 
