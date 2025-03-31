@@ -1,6 +1,6 @@
 import httpx
 from sqlalchemy.future import select
-from app.models.user import User
+from app.db.models import User
 from app.core.config import settings
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
