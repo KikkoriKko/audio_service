@@ -19,9 +19,6 @@ fastapi_audio_service/
 │   │── core/  
 │   │   │── config.py  # Конфигурация приложения  
 │   │   │── security.py  # JWT и безопасность  
-│   │── models/  
-│   │   │── user.py  # Модель пользователя  
-│   │   │── file.py  # Модель аудиофайла  
 │   │── schemas/  
 │   │   │── user.py  # Pydantic-схемы для пользователей  
 │   │   │── file.py  # Pydantic-схемы для аудиофайлов  
@@ -31,8 +28,9 @@ fastapi_audio_service/
 │   │── db/  
 │   │   │── session.py  # Подключение к БД  
 │   │   │── base.py  # Базовые модели  
-│   │   │── migrations/  # Миграции Alembic  
-│   │── main.py  # Основной файл FastAPI  
+│   │   │── mоdels/  # модели  
+│   │── main.py  # Основной файл FastAPI 
+│── migrations/  # Миграции Alembic 
 │── storage/  # Локальное хранилище аудиофайлов  
 │── .env  # Переменные окружения  
 │── Dockerfile  # Образ для Docker  
