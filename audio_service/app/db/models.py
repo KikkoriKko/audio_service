@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from app.core.security import verify_password
 
+
 class AudioFile(Base):
     __tablename__ = "files"
 

@@ -1,12 +1,15 @@
 from pydantic import BaseModel
 from datetime import datetime
 
+
 class FileBase(BaseModel):
     name: str
     path: str
 
+
 class FileCreate(FileBase):
     pass
+
 
 class AudioFileResponse(FileBase):
     id: int

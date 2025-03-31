@@ -9,6 +9,7 @@ from app.db.models import User
 
 ALLOWED_EXTENSIONS = {".mp3", ".wav", ".ogg"}
 
+
 async def upload_audio_file(file: UploadFile, db: AsyncSession):
     """
     Загрузка аудиофайла в локальное хранилище и сохранение данных в базе данных
@@ -27,6 +28,7 @@ async def upload_audio_file(file: UploadFile, db: AsyncSession):
     await db.commit()
     await db.refresh(new_file)
     return new_file
+
 
 async def get_audio_files(user: User, db: AsyncSession):
     """
