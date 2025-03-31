@@ -15,7 +15,6 @@ class Settings(BaseSettings):
     DB_PORT: int = '5232'
     DB_NAME: str = 'fastapi_db'
 
-    # DATABASE_SQLITE = 'sqlite+aiosqlite:///data/db.sqlite3'
     model_config = SettingsConfigDict(
         env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
     )

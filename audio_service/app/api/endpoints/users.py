@@ -4,6 +4,7 @@ from app.db.session import get_db
 from app.schemas.user import UserCreate, UserResponse
 from app.db.models import User
 from app.core.security import get_password_hash, create_access_token
+from app.core.security import verify_password
 
 router = APIRouter()
 
@@ -21,7 +22,7 @@ async def register_user(user_in: UserCreate, db: AsyncSession = Depends(get_db))
 
 @router.post("/token")
 async def login_user(user_in: UserCreate, db: AsyncSession = Depends(get_db)):
-    user = await User.authenticate(db, password=user_in.password)
+    user = await User.authenticate(db,username=user_in.username, password=user_in.password, verify_func=verify_password)
     if not user:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
