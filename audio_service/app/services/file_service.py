@@ -3,9 +3,9 @@ from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile, HTTPException
 from pathlib import Path
-from app.models.file import AudioFile
+from app.db.models import AudioFile
 from app.core.config import settings
-from app.models.user import User
+from app.db.models import User
 
 ALLOWED_EXTENSIONS = {".mp3", ".wav", ".ogg"}
 

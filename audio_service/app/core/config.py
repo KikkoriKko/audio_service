@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 import os
 
 
@@ -9,20 +9,20 @@ class Settings(BaseSettings):
     DEBUG: bool = True
 
     # Настройка строки подключения или отдельных параметров
-    DATABASE_URL: str
-    POSTGRES_USER: str = "user"
-    POSTGRES_PASSWORD: str = "password"
-    POSTGRES_DB: str = "fastapi_db"
-    POSTGRES_HOST: str = "localhost"
-    POSTGRES_PORT: int = 5432
+    DB_USER: str = 'user'
+    DB_PASSWORD: str = 'password'
+    DB_HOST: str = 'db'
+    DB_PORT: int = '5232'
+    DB_NAME: str = 'fastapi_db'
 
-    def get_db_url(self) -> str:
-        """Возвращает строку подключения к БД"""
-        if self.DATABASE_URL:
-            return self.DATABASE_URL
-        return (f"postgresql+asyncpg://{self.POSTGRES_USER}:"
-                f"{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:"
-                f"{self.POSTGRES_PORT}/{self.POSTGRES_DB}")
+    # DATABASE_SQLITE = 'sqlite+aiosqlite:///data/db.sqlite3'
+    model_config = SettingsConfigDict(
+        env_file=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    )
+
+    def get_db_url(self):
+        return (f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@"
+                f"{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}")
 
     # Настройки аутентификации через Яндекс
     YANDEX_CLIENT_ID: str = ""
@@ -35,10 +35,6 @@ class Settings(BaseSettings):
 
     # Путь для хранения файлов
     MEDIA_DIRECTORY: str = os.path.join(os.getcwd(), "storage")
-
-    class Config:
-        env_file = ".env"
-        extra = "allow"  # Разрешает дополнительные параметры
 
 
 # Инициализация настроек
