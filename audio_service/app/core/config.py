@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     DB_USER: str = 'user'
     DB_PASSWORD: str = 'password'
     DB_HOST: str = 'db'
-    DB_PORT: int = '5232'
+    DB_PORT: int = '5432'
     DB_NAME: str = 'fastapi_db'
 
     model_config = SettingsConfigDict(

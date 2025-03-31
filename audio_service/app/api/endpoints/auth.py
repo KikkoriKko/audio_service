@@ -9,15 +9,26 @@ from app.db.session import get_db
 router = APIRouter()
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
+
 @router.post("/login", response_model=UserResponse)
 async def login_with_yandex(code: str, db: AsyncSession = Depends(get_db)):
     user = await authenticate_user(code, db)
     if not user:
         raise HTTPException(status_code=400, detail="Invalid credentials")
 
-    access_token = create_access_token({"sub": str(user.id)})  # Используем `sub`
+    access_token = create_access_token(user.id)
     return {"user": user, "access_token": access_token}
+
 
 @router.get("/me", response_model=UserResponse)
 async def get_current_user_info(current_user: UserResponse = Depends(get_current_user)):
     return current_user
+
+
+@router.post("/refresh")
+async def refresh_access_token(current_user: UserResponse = Depends(get_current_user)):
+    """
+    Обновление access_token, если пользователь уже авторизован.
+    """
+    access_token = create_access_token(current_user.id)
+    return {"access_token": access_token, "token_type": "bearer"}

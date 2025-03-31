@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from app.db.base import Base
 from datetime import datetime
@@ -27,6 +27,7 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
     yandex_user_id: Mapped[str | None] = mapped_column(String, unique=True, index=True, nullable=True)
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
 
     files = relationship("AudioFile", back_populates="owner")
 

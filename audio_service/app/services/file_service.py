@@ -3,9 +3,9 @@ from sqlalchemy.future import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import UploadFile, HTTPException
 from pathlib import Path
-from app.db.models import AudioFile
+import os
+from app.db.models import AudioFile, User
 from app.core.config import settings
-from app.db.models import User
 
 ALLOWED_EXTENSIONS = {".mp3", ".wav", ".ogg"}
 
@@ -36,3 +36,24 @@ async def get_audio_files(user: User, db: AsyncSession):
     """
     result = await db.execute(select(AudioFile).filter(AudioFile.owner_id == user.id))
     return result.scalars().all()
+
+
+async def delete_audio_file(file_id: int, user: User, db: AsyncSession) -> bool:
+    """
+    Удаление аудиофайла пользователя из базы данных и локального хранилища
+    """
+    result = await db.execute(select(AudioFile).filter(AudioFile.id == file_id, AudioFile.owner_id == user.id))
+    audio_file = result.scalar_one_or_none()
+
+    if not audio_file:
+        return False  # Файл не найден или не принадлежит пользователю
+
+    # Удаление файла из локального хранилища
+    file_path = Path(audio_file.path)
+    if file_path.exists():
+        os.remove(file_path)
+
+    # Удаление записи из базы данных
+    await db.delete(audio_file)
+    await db.commit()
+    return True
